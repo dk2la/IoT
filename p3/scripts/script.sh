@@ -6,6 +6,7 @@ curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
 sudo usermod -aG docker $USER
 newgrp docker
+sudo service docker start
 
 echo "Install K3D"
 ## Install K3D
@@ -14,7 +15,7 @@ sudo chmod +x /usr/local/bin/k3d
 
 echo "Creating cluster"
 ## Create cluster
-k3d cluster create aboba --api-port 6443 -p 8080:80@loadbalancer --agents 2
+k3d cluster create aboba --api-port 6443 -p 8080:80@loadbalancer
 
 echo "Install kubectl"
 ##install kubectl
@@ -34,8 +35,8 @@ kubectl create namespace dev
 echo "Applying K3D configs"
 ## Apply argocd Install conf
 # kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-kubectl apply -f /vagrant/configs/install.yaml -n argocd
-kubectl apply -f /vagrant/configs/ingress.yaml -n argocd
+kubectl apply -f /vagrant/confs/install.yaml -n argocd
+kubectl apply -f /vagrant/confs/ingress.yaml -n argocd
 
 echo "Set password for ArgoCD"
 ## Set password for ArgoCD newinceptionschoolproject newinceptionproject

@@ -9,7 +9,7 @@ spec:
   source:
     repoURL: https://github.com/dk2la/sjakku.git
     targetRevision: master
-    path: app
+    path: .
     directory:
       recurse: true
   destination:
