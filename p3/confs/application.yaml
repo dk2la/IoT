@@ -2,10 +2,10 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   labels:
-    app: argocdproject
-  name: argocdrocks-app
+    app: abobaproject
+  name: aboba-app
 spec:
-  project: argocdinc-project
+  project: aboba-project
   source:
     repoURL: https://github.com/dk2la/sjakku.git
     targetRevision: master
@@ -17,5 +17,5 @@ spec:
     namespace: dev
   syncPolicy:
     automated:
-      prune: false
+      prune: true
       selfHeal: true
