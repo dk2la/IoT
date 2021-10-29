@@ -13,6 +13,5 @@ Vagrant.configure(2) do |config|
             v.memory = 2048
             v.cpus = 1
         end
-        control.vm.provision "shell", path: "/Users/danila/Desktop/inception-of-aboba/p3/scripts/script.sh"
     end
 end
