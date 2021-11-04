@@ -1,3 +1,6 @@
+echo "Install net-tools"
+sudo dnf install -y net-tools
+
 echo "Setup Docker"
 ##install docker
 curl -fsSL https://get.docker.com -o get-docker.sh
@@ -13,7 +16,7 @@ sudo mv /usr/local/bin/k3d /usr/bin
 
 echo "Creating cluster"
 ## Create cluster
-sudo k3d cluster create aboba --api-port 6443 -p 8080:80@loadbalancer
+sudo k3d cluster create aboba --api-port 6443 -p 30000-30010:30000-30010@loadbalancer
 
 echo "Install kubectl"
 ##install kubectl
@@ -34,8 +37,8 @@ sudo kubectl create namespace gitlab
 echo "Applying K3D configs"
 ## Apply argocd Install conf
 # kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-sudo kubectl apply -f /vagrant/confs/install.yaml -n argocd
-sudo kubectl apply -f /vagrant/confs/ingress.yaml -n argocd
+sudo kubectl apply -f /vagrant/confs/argocd/install.yaml -n argocd
+sudo kubectl apply -f /vagrant/confs/argocd/ingress.yaml -n argocd
 
 echo "Set password for ArgoCD"
 ## Set password for ArgoCD newinceptionschoolproject newinceptionproject
@@ -47,10 +50,10 @@ sudo kubectl -n argocd patch secret argocd-secret \
 
 echo "Applying configs application for ArgoCD"
 ## Apply configuration
-sudo kubectl apply -f /vagrant/confs/agrocd/argocd-project.yaml -n argocd
+sudo kubectl apply -f /vagrant/confs/argocd/argocd-project.yaml -n argocd
 
 ## Setup application to argocd
-sudo kubectl apply -f /vagrant/confs/agrocd/application.yaml -n argocd
+sudo kubectl apply -f /vagrant/confs/argocd/application.yaml -n argocd
 
 ## Setup gitlab application
 sudo kubectl apply -f /vagrant/confs/gitlab/deployment.yaml -n gitlab
