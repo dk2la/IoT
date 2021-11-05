@@ -43,11 +43,11 @@ spec:
         name: gitlab-deploy
         resources:
           limits:
-            memory: '1024Mi'
-            cpu: '0.5'
+            memory: '3000Mi'
+            cpu: '1.2'
           requests:
-            memory: '1024Mi'
-            cpu: '0.5'
+            memory: '3000Mi'
+            cpu: '1.2'
         ports:
         - containerPort: 80
         - containerPort: 443
@@ -56,3 +56,5 @@ spec:
         - name: GITLAB_OMNIBUS_CONFIG
           value: |
             external_url 'http://172.18.0.3'
+        - name: GITLAB_ROOT_PASSWORD
+          value: "Aboba"

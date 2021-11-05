@@ -16,7 +16,7 @@ sudo mv /usr/local/bin/k3d /usr/bin
 
 echo "Creating cluster"
 ## Create cluster
-sudo k3d cluster create aboba --api-port 6443 -p 30000-30010:30000-30010@server:0
+sudo k3d cluster create aboba --api-port 6443 -p 30000-30011:30000-30011@server:0
 
 echo "Install kubectl"
 ##install kubectl
@@ -35,8 +35,8 @@ sudo kubectl create namespace dev
 sudo kubectl create namespace gitlab
 
 echo "Applying K3D configs"
-## Apply argocd Install conf
-# kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+# Apply argocd Install conf
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 sudo kubectl apply -f /vagrant/confs/argocd/install.yaml -n argocd
 sudo kubectl apply -f /vagrant/confs/argocd/ingress.yaml -n argocd
 

@@ -7,7 +7,7 @@ metadata:
 spec:
   project: aboba-project
   source:
-    repoURL: https://github.com/dk2la/sjakku.git
+    repoURL: https://localhost:30008/root/aboba.git
     targetRevision: master
     path: .
     directory:
