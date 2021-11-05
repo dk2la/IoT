@@ -2567,8 +2567,6 @@ spec:
         - --staticassets
         - /shared/app
         - --insecure
-        - --rootpath
-        - /
         image: argoproj/argocd:v1.6.2
         imagePullPolicy: Always
         livenessProbe:
