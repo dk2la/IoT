@@ -16,7 +16,7 @@ sudo mv /usr/local/bin/k3d /usr/bin
 
 echo "Creating cluster"
 ## Create cluster
-sudo k3d cluster create aboba --api-port 6443 -p 30000-30010:30000-30010@loadbalancer
+sudo k3d cluster create aboba --api-port 6443 -p 30000-30010:30000-30010@server:0
 
 echo "Install kubectl"
 ##install kubectl

@@ -9,7 +9,6 @@ fi
 
 sudo fdisk -u /dev/sda <<EOF
 d
-y
 n
 p
 1

@@ -9,7 +9,7 @@ spec:
   ports:
     - port: 8080
       name: http
-      targetPort: 8080
+      targetPort: 80
       nodePort: 30007
     - port: 443
       name: https
@@ -43,13 +43,13 @@ spec:
         name: gitlab-deploy
         resources:
           limits:
-            memory: '2048Mi'
-            cpu: '1000m'
+            memory: '1024Mi'
+            cpu: '0.5'
           requests:
-            memory: '2048Mi'
+            memory: '1024Mi'
             cpu: '0.5'
         ports:
-        - containerPort: 8080
+        - containerPort: 80
         - containerPort: 443
         - containerPort: 22
         env:
