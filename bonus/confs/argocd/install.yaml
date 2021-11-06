@@ -2404,6 +2404,13 @@ spec:
           initialDelaySeconds: 5
           periodSeconds: 10
         name: argocd-application-controller
+        resources:
+          limits:
+            memory: '256Mi'
+            cpu: '0.1'
+          requests:
+            memory: '256Mi'
+            cpu: '0.1'
         ports:
         - containerPort: 8082
         readinessProbe:
@@ -2438,6 +2445,13 @@ spec:
         image: quay.io/dexidp/dex:v2.22.0
         imagePullPolicy: Always
         name: dex
+        resources:
+          limits:
+            memory: '256Mi'
+            cpu: '0.1'
+          requests:
+            memory: '256Mi'
+            cpu: '0.1'
         ports:
         - containerPort: 5556
         - containerPort: 5557
@@ -2488,6 +2502,13 @@ spec:
         image: redis:5.0.3
         imagePullPolicy: Always
         name: redis
+        resources:
+          limits:
+            memory: '256Mi'
+            cpu: '0.1'
+          requests:
+            memory: '256Mi'
+            cpu: '0.1'
         ports:
         - containerPort: 6379
 ---
@@ -2523,6 +2544,13 @@ spec:
           tcpSocket:
             port: 8081
         name: argocd-repo-server
+        resources:
+          limits:
+            memory: '256Mi'
+            cpu: '0.2'
+          requests:
+            memory: '256Mi'
+            cpu: '0.2'
         ports:
         - containerPort: 8081
         - containerPort: 8084
@@ -2576,6 +2604,13 @@ spec:
           initialDelaySeconds: 3
           periodSeconds: 30
         name: argocd-server
+        resources:
+          limits:
+            memory: '256Mi'
+            cpu: '0.2'
+          requests:
+            memory: '256Mi'
+            cpu: '0.2'
         ports:
         - containerPort: 8080
         - containerPort: 8083
