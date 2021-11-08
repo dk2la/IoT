@@ -1,7 +1,7 @@
 Vagrant.configure(2) do |config|
     config.vm.box = "centos/8"
     config.vm.synced_folder ".", "/vagrant", type: 'rsync'
-    config.disksize.size = '30GB'
+    config.disksize.size = '100GB'
 
     config.vm.define "sjakkuS" do |control|
         control.vm.hostname = "sjakkuS"
@@ -12,11 +12,10 @@ Vagrant.configure(2) do |config|
         # ]
         control.vm.provider "virtualbox" do |v|
             v.customize ["modifyvm", :id, "--name", "sjakkuS"]
-            v.memory = 4096
-            v.cpus = 3
+            v.memory = 10000
+            v.cpus = 5
         end
         control.vm.provision "shell", path: "./scripts/disk_prepare.sh"
         control.vm.provision "shell", path: "./scripts/script.sh"
-        control.vm.provision "shell", path: "./scripts/git.sh"
     end
 end

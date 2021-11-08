@@ -1,5 +1,5 @@
 echo "Install net-tools"
-sudo dnf install -y net-tools
+sudo dnf install -y net-tools git
 
 echo "Setup Docker"
 ##install docker
@@ -34,9 +34,32 @@ sudo kubectl create namespace argocd
 sudo kubectl create namespace dev
 sudo kubectl create namespace gitlab
 
-echo "Applying K3D configs"
-# Apply argocd Install conf
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+ADDR=$(ifconfig | grep 192 | awk '{print $2}')
+echo "ALLO"
+echo $ADDR
+#!/bin/bash
+#install helm
+echo "installing helm..."
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+sudo mv /usr/local/bin/helm /usr/bin
+echo "create namespace"
+#deploy gitlab
+eho "deploy gitlab minimum"
+git clone https://gitlab.com/gitlab-org/charts/gitlab.git
+cd gitlab
+cp examples/values-minikube-minimum.yaml ./
+helm repo add gitlab https://charts.gitlab.io/
+helm repo update
+helm dependency update -n gitlab
+helm upgrade --install gitlab -f values-minikube-minimum.yaml . --timeout 600s --set global.hosts.domain=$ADDR --set global.edition=ce --set global.hosts.externalIP=$ADDR --set global.hosts.https=false -n gitlab
+echo "Gitlab Deployed !"
+
+
+
+# echo "Applying K3D configs"
+# # Apply argocd Install conf
 sudo kubectl apply -f /vagrant/confs/argocd/install.yaml -n argocd
 sudo kubectl apply -f /vagrant/confs/argocd/ingress.yaml -n argocd
 
@@ -54,6 +77,3 @@ sudo kubectl apply -f /vagrant/confs/argocd/argocd-project.yaml -n argocd
 
 ## Setup application to argocd
 sudo kubectl apply -f /vagrant/confs/argocd/application.yaml -n argocd
-
-## Setup gitlab application
-sudo kubectl apply -f /vagrant/confs/gitlab/deployment.yaml -n gitlab

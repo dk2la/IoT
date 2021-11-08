@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: gitlab-svc
+  namespace: gitlab
 spec:
   type: NodePort
   selector:
@@ -48,13 +49,19 @@ spec:
           requests:
             memory: '3000Mi'
             cpu: '2'
+        volumeMounts:
+        - mountPath: /etc/gitlab/gitlab.rb
+          name: cfgmap
+          subPath: gitlab.rb
         ports:
         - containerPort: 80
+        - containerPort: 8080
         - containerPort: 443
         - containerPort: 22
         env:
-        - name: GITLAB_OMNIBUS_CONFIG
-          value: |
-            external_url 'http://172.18.0.3'
         - name: GITLAB_ROOT_PASSWORD
           value: "Aboba"
+      volumes:
+      - name: cfgmap
+        configMap:
+          name: gitlab-rb-cm
