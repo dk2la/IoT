@@ -34,6 +34,8 @@ sudo kubectl create namespace argocd
 sudo kubectl create namespace dev
 sudo kubectl create namespace gitlab
 
+sudo kubectl apply -f /vagrant/confs/gitlab/deployment-svc.yaml -n gitlab
+
 ADDR=$(ifconfig | grep 192 | awk '{print $2}')
 echo "ALLO"
 echo $ADDR
@@ -46,7 +48,7 @@ chmod 700 get_helm.sh
 sudo mv /usr/local/bin/helm /usr/bin
 echo "create namespace"
 #deploy gitlab
-eho "deploy gitlab minimum"
+echo "deploy gitlab minimum"
 git clone https://gitlab.com/gitlab-org/charts/gitlab.git
 cd gitlab
 cp examples/values-minikube-minimum.yaml ./
@@ -56,6 +58,8 @@ helm dependency update -n gitlab
 helm upgrade --install gitlab -f values-minikube-minimum.yaml . --timeout 600s --set global.hosts.domain=$ADDR --set global.edition=ce --set global.hosts.externalIP=$ADDR --set global.hosts.https=false -n gitlab
 echo "Gitlab Deployed !"
 
+sed -i "s|192.168.0.107|$ADDR|g" /vagrant/confs/argocd/application.yaml
+sed -i "s|192.168.0.107|$ADDR|g" /vagrant/confs/argocd/argocd-project.yaml
 
 
 # echo "Applying K3D configs"
