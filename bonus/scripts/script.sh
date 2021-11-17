@@ -34,36 +34,28 @@ sudo kubectl create namespace argocd
 sudo kubectl create namespace dev
 sudo kubectl create namespace gitlab
 
-sudo kubectl apply -f /vagrant/confs/gitlab/deployment-svc.yaml -n gitlab
-
 ADDR=$(ifconfig | grep 192 | awk '{print $2}')
-echo "ALLO"
-echo $ADDR
-#!/bin/bash
 #install helm
 echo "installing helm..."
 curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
 chmod 700 get_helm.sh
 ./get_helm.sh
 sudo mv /usr/local/bin/helm /usr/bin
-echo "create namespace"
-#deploy gitlab
-echo "deploy gitlab minimum"
+
+echo "deploy gitlab"
 git clone https://gitlab.com/gitlab-org/charts/gitlab.git
 cd gitlab
-cp examples/values-minikube-minimum.yaml ./
 helm repo add gitlab https://charts.gitlab.io/
 helm repo update
 helm dependency update -n gitlab
-helm upgrade --install gitlab -f values-minikube-minimum.yaml . --timeout 600s --set global.hosts.domain=$ADDR --set global.edition=ce --set global.hosts.externalIP=$ADDR --set global.hosts.https=false -n gitlab
-echo "Gitlab Deployed !"
-
-sed -i "s|192.168.0.107|$ADDR|g" /vagrant/confs/argocd/application.yaml
-sed -i "s|192.168.0.107|$ADDR|g" /vagrant/confs/argocd/argocd-project.yaml
-
+helm upgrade --install gitlab -f examples/values-minikube-minimum.yaml . --timeout 600s --set global.hosts.domain=$ADDR --set global.edition=ce --set global.hosts.externalIP=$ADDR --set global.hosts.https=false -n gitlab
+sudo kubectl apply -f /vagrant/confs/gitlab/deployment-svc.yaml -n gitlab
 
 # echo "Applying K3D configs"
 # # Apply argocd Install conf
+echo "deploy argocd"
+sed -i "s|192.168.0.107|$ADDR|g" /vagrant/confs/argocd/application.yaml
+sed -i "s|192.168.0.107|$ADDR|g" /vagrant/confs/argocd/argocd-project.yaml
 sudo kubectl apply -f /vagrant/confs/argocd/install.yaml -n argocd
 sudo kubectl apply -f /vagrant/confs/argocd/ingress.yaml -n argocd
 
@@ -81,3 +73,5 @@ sudo kubectl apply -f /vagrant/confs/argocd/argocd-project.yaml -n argocd
 
 ## Setup application to argocd
 sudo kubectl apply -f /vagrant/confs/argocd/application.yaml -n argocd
+
+sudo kubectl get secret gitlab-gitlab-initial-root-password -n gitlab  -ojsonpath='{.data.password}'  | base64 --decode ; echo
