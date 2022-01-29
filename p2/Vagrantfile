@@ -3,10 +3,10 @@ Vagrant.configure(2) do |config|
     config.vm.synced_folder ".", "/vagrant"
 
     config.vm.define "sjakkuS" do |control|
-        control.vm.hostname = "sjakkuSp2"
-        control.vm.network "private_network", ip: "192.168.42.110"
+        control.vm.hostname = "sjakkuS"
+        control.vm.network "private_network", ip: "192.168.60.110"
         control.vm.provider "virtualbox" do |v|
-            v.customize ["modifyvm", :id, "--name", "sjakkuSp2"]
+            v.customize ["modifyvm", :id, "--name", "sjakkuS"]
             v.memory = 2048
             v.cpus = 1
         end
